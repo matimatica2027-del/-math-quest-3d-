@@ -1,0 +1,193 @@
+<!doctype html><html lang="kk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>MATH QUEST 3D — Математикалық патшалық</title><style>
+*{box-sizing:border-box}body{margin:0;overflow:hidden;font-family:system-ui,Arial,sans-serif;background:#101831;color:white}canvas{display:block}button,input{font:inherit}button{cursor:pointer;border:0}#top{position:fixed;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:start;pointer-events:none;z-index:4;gap:8px}.pill{background:#161039df;border:2px solid #ae7aff;border-radius:18px;padding:10px 14px;box-shadow:0 4px 22px #250a79a0;font-weight:800;text-shadow:0 2px 3px #000}.pill small{display:block;color:#e2d4ff;font-size:11px}.pill b{color:#ffe36a}#tip{position:fixed;bottom:125px;left:50%;transform:translateX(-50%);background:#20134be8;border:2px solid #ffd85b;border-radius:20px;padding:12px 17px;z-index:3;text-align:center;max-width:90%;font-weight:700;pointer-events:none}#controls{position:fixed;bottom:18px;left:18px;z-index:5;display:flex;align-items:end;gap:14px}#pad{width:130px;height:130px;border-radius:50%;background:#19143888;border:3px solid #e5d9ff88;position:relative;touch-action:none}#nub{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#d3b9ff,#8057f3);border:3px solid white;position:absolute;left:35px;top:35px;box-shadow:0 0 18px #9e69ff}#jump,#interact{border:2px solid #ffe99c;background:linear-gradient(135deg,#8a3ff0,#3b207b);color:white;border-radius:19px;padding:15px 17px;font-weight:800;box-shadow:0 5px 20px #0009}#interact{display:none}#actions{position:fixed;bottom:28px;right:18px;z-index:5;display:flex;flex-direction:column;gap:10px}#overlay,#quiz,#finish{position:fixed;inset:0;z-index:10;background:#090a25d9;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(7px)}.panel{width:min(680px,100%);max-height:94vh;overflow:auto;border:3px solid #f3cc70;border-radius:26px;background:linear-gradient(160deg,#392070,#151b49 78%);box-shadow:0 0 60px #ab6aff88;padding:clamp(18px,4vw,30px);text-align:center}h1{font-size:clamp(30px,7vw,55px);margin:8px 0;color:#ffe47c;text-shadow:0 4px 0 #733d23}h2{color:#ffe47c;margin:5px 0 14px}p{line-height:1.5}.primary{background:linear-gradient(135deg,#ffec76,#f59d39);color:#352041;padding:13px 25px;border-radius:15px;font-weight:900;box-shadow:0 6px 0 #a55c26;margin:8px}.secondary{background:#7556b7;color:white;border-radius:13px;padding:12px 20px;font-weight:700;margin:8px}.questions{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left;margin:18px 0}.q{background:#ffffff15;border:1px solid #ffffff55;border-radius:14px;padding:12px}.q label{display:block;font-size:clamp(14px,2.7vw,19px);font-weight:800;margin-bottom:7px}.q input{width:100%;background:#fff;color:#1a1641;border:2px solid #d6baff;border-radius:10px;padding:11px;font-size:18px}.desc{text-align:left;background:#8e62b52c;border-radius:14px;padding:12px 16px;font-size:14px}.desc div{margin:6px 0}#feedback{min-height:27px;font-weight:800;color:#ffe47c}.hidden{display:none!important}#error{position:fixed;inset:0;background:#17112d;color:white;z-index:30;display:none;padding:30px}#stagebar{position:fixed;top:78px;left:50%;transform:translateX(-50%);z-index:3;background:#1e1644c9;border-radius:15px;padding:8px 15px;font-weight:700;text-align:center;pointer-events:none;font-size:13px}#overlay .subtitle{font-size:18px}#finish .trophy{font-size:80px}@media(max-width:520px){.questions{grid-template-columns:1fr}.pill{font-size:13px;padding:7px 10px}#stagebar{top:66px;width:70%}#tip{bottom:165px;font-size:12px}#pad{width:112px;height:112px}#nub{left:27px;top:27px}#jump,#interact{padding:12px;font-size:13px}}
+
+/* Visual upgrade only: gameplay and scoring unchanged */
+.pill{background:linear-gradient(140deg,#21133feF,#38216be8);border-color:#c69bff;box-shadow:0 5px 25px #6f34c6aa,inset 0 1px 0 #ffffff55;backdrop-filter:blur(12px)}
+#stagebar{border:1px solid #d5a8ff;background:linear-gradient(90deg,#2d1455e8,#553193e8);box-shadow:0 0 22px #a268ff88;text-shadow:0 2px 4px #000}
+#tip{box-shadow:0 5px 28px #1d0b4eaa,inset 0 1px 0 #ffffff55;background:linear-gradient(130deg,#21123af0,#3d2671e8)}
+.panel{border:3px solid #ffd975;background:radial-gradient(circle at 50% 0%,#6d39a0,#2a1958 58%,#131b3e);box-shadow:0 0 0 5px #6f38bb55,0 16px 70px #08071bdd,inset 0 0 35px #b67dff33}
+.q{background:linear-gradient(125deg,#ffffff1d,#ffffff09);border-color:#e6c8ff77;box-shadow:inset 0 1px 0 #ffffff22}
+.q input:focus{outline:3px solid #ffdf82;box-shadow:0 0 15px #a777ff}
+.primary{box-shadow:0 6px 0 #9d5622,0 0 18px #ffd45a55}
+#jump{box-shadow:0 0 20px #a77aff77,0 5px 20px #0008}
+#pad{box-shadow:inset 0 0 30px #bd92ff44,0 0 20px #9c67ff44}
+
+/* Fantasy game polish - interface only */
+.panel{background:linear-gradient(145deg,#4d2a83 0%,#211c57 55%,#111b40 100%);border:3px solid #ffd67a;box-shadow:0 12px 55px #09062bbd,inset 0 0 35px #b57cff20} .pill{background:linear-gradient(130deg,#302063ef,#161943e8);border-color:#e5b8ff;box-shadow:0 6px 24px #1510509c} .primary{transition:transform .15s,filter .15s}.primary:active{transform:translateY(3px);filter:brightness(1.1)} .q{background:linear-gradient(145deg,#ffffff22,#a46bf012);border-color:#d3b7ff77}.q input:focus{outline:3px solid #ffdb80;outline-offset:2px} #stagebar{border:1px solid #f6d47a;box-shadow:0 4px 22px #0008} #tip{box-shadow:0 8px 26px #0008} 
+
+/* Hybrid cinematic UI: layered scene art behind the real 3D gameplay */
+#quiz .panel{position:relative;isolation:isolate;background:linear-gradient(180deg,#16112b33,#16102ded 52%,#15132af5),radial-gradient(ellipse at 75% 10%,#ffdf8b,#7e5bb0 43%,#1d3355 78%);border:3px solid #f7d38a;box-shadow:0 20px 80px #08031be0,0 0 0 5px #a77aff35;}
+#quiz .panel:before{content:"";position:absolute;inset:0 0 auto;height:35%;z-index:-1;opacity:.85;pointer-events:none;background:radial-gradient(circle at 80% 20%,#fff3b8 0 4%,transparent 9%),linear-gradient(145deg,transparent 40%,#3e5679 40% 48%,transparent 48%),linear-gradient(35deg,transparent 44%,#596b91 44% 53%,transparent 53%),linear-gradient(155deg,transparent 55%,#293f64 55% 68%,transparent 68%),linear-gradient(180deg,#90b7d6,#667ab1 58%,#21394e);mask-image:linear-gradient(#000 60%,transparent)}
+#quiz[data-stage="1"] .panel{background:linear-gradient(180deg,#102d4540,#13142dec 48%,#15132af5),radial-gradient(circle at 60% 0%,#a4efff,#397c9c 50%,#192448)}
+#quiz[data-stage="2"] .panel{background:linear-gradient(180deg,#1a113340,#14102bef 48%,#15132af5),radial-gradient(circle at 65% 0%,#d7a9ff,#654e9a 55%,#15132a)}
+#quiz[data-stage="3"] .panel{background:linear-gradient(180deg,#35241040,#16122def 48%,#15132af5),radial-gradient(circle at 60% 0%,#ffdc8a,#92613b 55%,#15132a)}
+#quizIcon{filter:drop-shadow(0 0 14px #ffdd77);animation:floatIcon 3s ease-in-out infinite}
+@keyframes floatIcon{50%{transform:translateY(-7px)}}
+.q{background:linear-gradient(140deg,#fdf4e9f5,#e5d7f8ed);color:#27203e;border:2px solid #f4d68e;box-shadow:0 7px 18px #0005}
+.q label{color:#25203c;text-shadow:none}.q input{background:#fff;border:2px solid #ac82df;min-height:48px}
+.desc{background:#120d2dba;border:1px solid #e5bb79;line-height:1.5}
+#quiz h2{font-size:clamp(24px,5vw,36px);text-shadow:0 3px 8px #000}
+#quiz .primary{font-size:clamp(15px,3vw,19px)}
+#top .pill{backdrop-filter:blur(14px)}
+@media(max-width:520px){#quiz .panel{padding:15px 13px}.questions{gap:9px;margin:12px 0}.q{padding:10px}.desc{font-size:12px}}
+@media(prefers-reduced-motion:reduce){#quizIcon{animation:none}}
+</style></head><body><div id="error">3D көрініс жүктелмеді. Интернет байланысын тексеріп, бетті жаңартыңыз.</div><div id="top"><div class="pill">🏰 MATH QUEST 3D<small>Математикалық патшалық</small></div><div class="pill">⭐ <b id="score">0</b>/10 балл <small id="stageCount">1 / 4 кезең</small></div></div><div id="stagebar">🔐 Құпия құлыпты аш</div><div id="tip">🎮 Қақпаға жақындаңыз · WASD / бағыттауыштар</div><div id="controls"><div id="pad"><div id="nub"></div></div></div><div id="actions"><button id="interact">✨ Тапсырма</button><button id="jump">⬆ СЕКІРУ</button></div>
+<div id="overlay"><div class="panel"><div style="font-size:56px">🏰✨🎮</div><h1>MATH QUEST 3D</h1><p class="subtitle">Математикалық патшалыққа қош келдің!</p><p>Кейіпкерді басқарып, 4 аймақтан өт. Әр қақпаның құлпын 4 есепті дұрыс шығарып аш. Барлығы — <b>10 балл</b>.</p><p>⌨️ WASD немесе бағыттауыштар · 📱 Экрандағы джойстик · Бос орын — секіру</p><button class="primary" id="start">🚀 ОЙЫНДЫ БАСТАУ</button></div></div>
+<div id="quiz" class="hidden"><div class="panel"><div id="quizIcon" style="font-size:38px">🔐</div><h2 id="quizTitle"></h2><p id="quizInstruction"></p><div id="questions" class="questions"></div><div id="descriptors" class="desc"></div><p id="feedback" role="status"></p><button id="check" class="primary">✅ Жауаптарды тексеру</button><button id="back" class="secondary">↩ Ойынға оралу</button></div></div>
+<div id="finish" class="hidden"><div class="panel"><div class="trophy">👑🏆🎉</div><h1>ҚҰТТЫҚТАЙМЫЗ!</h1><p>Сен барлық төрт кезеңнен өтіп, математикалық патшалықты құтқардың!</p><h2>⭐ 10 / 10 балл</h2><p>Алтын тәж енді сенікі, жас математик!</p><button class="primary" id="again">🔄 Қайта ойнау</button></div></div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+const levels=[
+{icon:'🔐',title:'Құпия құлыпты аш',instruction:'Өрнектердің мәнін табыңдар.',points:2,questions:[['−42,6 : (−100)',.426],['315,8 : (−100)',-3.158],['−256,5 : (−500)',.513],['−48,6 : 0,01',-4860]],desc:['Рационал сандарды бөлу кезінде таңбалар ережесін дұрыс қолданады — 1 балл.','Рационал сандарды бөлу амалын дұрыс орындайды — 1 балл.'],praise:'Жарайсың! Құпия құлып ашылды!'},
+{icon:'🌉',title:'Сиқырлы көпірден өт',instruction:'Көбейтуді орындаңдар.',points:2,questions:[['8 2/3 · (−0,15)',-1.3],['−12,5 · 2/5',-5],['−40,4 · (−1 1/4)',50.5],['6,25 · (−2 2/5)',-15]],desc:['Аралас сандарды бұрыс бөлшекке айналдырып, таңбалар ережесін дұрыс қолданады — 1 балл.','Рационал сандарды көбейту амалын дұрыс орындайды — 1 балл.'],praise:'Тамаша! Сиқырлы көпір іске қосылды!'},
+{icon:'💎',title:'Құпия үңгірдің сырын аш',instruction:'Бөлуді орындаңдар.',points:3,questions:[['−8 2/5 : 1 1/5',-7],['3 3/4 : (−0,75)',-5],['−0,875 : (−1 1/4)',.7],['24,5 : (−1 2/5)',-17.5]],desc:['Аралас сандарды бұрыс бөлшекке дұрыс айналдырады — 1 балл.','Бөлу кезінде таңбалар ережесін дұрыс қолданады — 1 балл.','Бөлу амалын дұрыс орындап, өрнектің мәнін табады — 1 балл.'],praise:'Керемет! Құпия үңгірдің есігі ашылды!'},
+{icon:'👑',title:'Алтын тәжді құтқар',instruction:'Тура теңдіктегі белгісіз көбейткішті табыңдар (x мәнін енгізіңіз).',points:3,questions:[['−2,5x = −15',6],['−4,2x = −16,8',4],['−0,03x = −0,27',9],['x · (−2 1/2) = 20',-8]],desc:['Белгісіз көбейткішті табу ережесін дұрыс қолданады — 1 балл.','Рационал сандарды бөлу кезінде таңбалар ережесін дұрыс қолданады — 1 балл.','Есептеулерді дұрыс орындап, белгісіз көбейткіштің мәнін табады — 1 балл.'],praise:'Ғажап! Алтын тәжді құтқардың!'}
+];
+const scene=new THREE.Scene();scene.background=new THREE.Color('#8ed8ff');scene.fog=new THREE.Fog('#9ed8f6',55,140);const camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,220);const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;document.body.prepend(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xe6f6ff,0x6a5975,2.4));const sun=new THREE.DirectionalLight(0xffe6ad,2.5);sun.position.set(-25,38,15);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-65;sun.shadow.camera.right=65;sun.shadow.camera.top=80;sun.shadow.camera.bottom=-80;scene.add(sun);
+const mats={grass:0x4eae65,path:0xd1b89c,stone:0x9d9cb6,roof:0x7853c7,wood:0x80533c,leaf:0x2ba46a,gold:0xffca4b,blue:0x4bafff,crystal:0x9c65ff};
+function material(c,emissive=0){return new THREE.MeshStandardMaterial({color:c,roughness:.68,metalness:.1,emissive,emissiveIntensity:emissive?.25:0})}
+function cube(w,h,d,c,x,y,z,parent=scene){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material(c));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
+function cone(r,h,c,x,y,z,parent=scene,n=6){const m=new THREE.Mesh(new THREE.ConeGeometry(r,h,n),material(c));m.position.set(x,y,z);m.castShadow=true;parent.add(m);return m}
+function orb(r,c,x,y,z,parent=scene){const m=new THREE.Mesh(new THREE.IcosahedronGeometry(r,1),material(c));m.position.set(x,y,z);parent.add(m);return m}
+cube(160,1,230,mats.grass,0,-.55,-68);cube(8,.16,175,mats.path,0,.04,-65);
+for(let z=18;z>-160;z-=13){for(const side of [-1,1]){const x=side*(11+Math.random()*13);cube(.9,3,.9,mats.wood,x,1.5,z);cone(3,7,Math.random()>.5?0x229454:0x318e69,x,6,z);orb(.65,0xf4a8e8,x+side*3,.5,z+2)}}
+for(let z=12;z>-155;z-=9){for(const s of [-1,1]){const x=s*5.2;cube(.45,2,.45,0x42305d,x,1,z);orb(.6,0xffc75d,x,2.2,z)}}
+// Castle and towers at stage 1
+cube(26,12,8,mats.stone,0,6,-28);for(const x of [-15,15]){cube(7,17,7,0x898ba9,x,8.5,-28);cone(5,7,mats.roof,x,20.5,-28,scene,4)}for(let x=-11;x<=11;x+=4)cube(2.5,2,3,0xb2b2c6,x,13,-28);for(const x of [-9,9])cube(2,3,.25,0xffd96e,x,7,-23.9);
+// Different stage zones
+for(let i=1;i<4;i++){const z=-28-i*36;for(const x of [-9,9]){cube(4,11,4,i===2?0x625478:0x8f91b6,x,5.5,z);cone(3.5,4,i===3?0xffc84d:0x7545b6,x,13,z)}cube(22,2,4,0x9894b2,0,11,z)}
+// bridge below the second portal
+const bridge=[];for(let j=0;j<9;j++){const p=cube(7,.35,1.5,0xb57e58,0,-2,-54-j*1.6);bridge.push(p)}
+// cave and crystals
+for(let j=0;j<15;j++){const x=(j%2?1:-1)*(6+Math.random()*8),z=-91-Math.random()*25;cone(1+Math.random(),3+Math.random()*4,0x9966ff,x,1.5,z,scene,5)}
+// crown platform
+cube(12,1,12,0x7453a7,0,0,-153);cube(3,2,3,mats.gold,0,1.2,-154);cone(2,3,0xffd857,0,4,-154,scene,7);
+const gates=[];const gateZ=[-23,-59,-95,-131];for(let i=0;i<4;i++){const z=gateZ[i];const group=new THREE.Group();group.position.set(0,0,z);scene.add(group);cube(2,9,2,0x6c538d,-4.6,4.5,0,group);cube(2,9,2,0x6c538d,4.6,4.5,0,group);cube(11,2,2,0xd6a95a,0,9,0,group);const door=cube(7,7,.8,i===0?0x6b44c8:0x775b9c,0,3.5,0,group);const lock=orb(.8,0xffd149,0,5,0.6,group);gates.push({group,door,lock,open:false});}
+
+// Decorative geometry only: no collision, scoring or level changes.
+const decor=[];
+function decorMaterial(color,glow=0){return new THREE.MeshStandardMaterial({color,roughness:.42,metalness:.24,emissive:color,emissiveIntensity:glow})}
+function jewel(x,y,z,color=0xb36bff,size=1){const gem=new THREE.Mesh(new THREE.OctahedronGeometry(size),decorMaterial(color,.38));gem.position.set(x,y,z);gem.castShadow=true;scene.add(gem);decor.push({mesh:gem,y,phase:x+z});return gem}
+function lantern(x,y,z){const post=cube(.28,2.5,.28,0x36244e,x,1.25,z);const lamp=new THREE.Mesh(new THREE.SphereGeometry(.48,10,8),decorMaterial(0xffd267,.9));lamp.position.set(x,y,z);scene.add(lamp);const light=new THREE.PointLight(0xffbd5e,1.4,9);light.position.set(x,y,z);scene.add(light);return post}
+// Stone path pavers and luminous markers
+for(let z=13;z>-151;z-=4.5){for(let side of [-1,1]){const slab=cube(.75,.09,2.5,0xd8c5ac,side*3.7,.14,z);slab.rotation.y=side*.08}}
+for(let z=8;z>-150;z-=15){lantern(-5.7,2.65,z);lantern(5.7,2.65,z)}
+// Ornamental castle battlements, tower windows, and glowing banners
+for(const x of [-15,15]){for(let y=6;y<=14;y+=4){cube(.95,1.8,.12,0xffc96d,x,y,-24.41)}for(let k=0;k<4;k++){cube(1.1,1.1,1.2,0xbcb5d5,x-2.3+k*1.5,17.3,-28)}}
+for(let x=-11;x<=11;x+=3.6){cube(1.3,1.2,1.3,0xbeb8d4,x,14.6,-27.7)}
+for(let x of [-6.3,6.3]){const banner=cube(1.7,4,.15,0x344bba,x,9.5,-23.72);cube(.95,.25,.2,0xe7cc6c,x,10,-23.6)}
+for(let z of [-19,-55,-91,-127]){jewel(-8.1,1.4,z,0x9c6dff,1.2);jewel(8.1,1.4,z,0x66d9ff,1.2)}
+// Flowers and bushes along the trail
+for(let z=16;z>-152;z-=5){for(let side of [-1,1]){const x=side*(8.5+((Math.sin(z*2.1)+1)*2.8));const bush=new THREE.Mesh(new THREE.DodecahedronGeometry(.85,0),decorMaterial(z%2?0x278b62:0x43b678));bush.position.set(x,.55,z);scene.add(bush);for(let j=0;j<3;j++){const petal=new THREE.Mesh(new THREE.IcosahedronGeometry(.16,0),decorMaterial(j%2?0xffa5d9:0xffd56b,.25));petal.position.set(x+Math.cos(j*2.1)*.6,1.15,z+Math.sin(j*2.1)*.6);scene.add(petal)}}}
+// Magic portal rings visually surround existing doors
+for(const g of gates){const ring=new THREE.Mesh(new THREE.TorusGeometry(4.7,.16,8,48),decorMaterial(0xe0a7ff,.65));ring.position.set(0,4.5,.3);ring.scale.y=1.03;g.group.add(ring);g.magicRing=ring}
+// Small floating lights, kept away from the player's controls
+for(let i=0;i<38;i++){const x=Math.sin(i*12.7)*21,z=12-i*4.1,y=2+(i%5)*.8;const sparkle=new THREE.Mesh(new THREE.SphereGeometry(.085,6,6),new THREE.MeshBasicMaterial({color:i%3?0xffe8a5:0xc6a5ff}));sparkle.position.set(x,y,z);scene.add(sparkle);decor.push({mesh:sparkle,y,phase:i*1.9})}
+
+
+// Premium fantasy environment: visual-only meshes and procedural textures.
+function texturePattern(kind){
+ const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');
+ ctx.fillStyle=kind==='stone'?'#b2afc4':kind==='path'?'#d7bf9b':'#52b86e';ctx.fillRect(0,0,256,256);
+ let seed=17;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
+ if(kind==='stone'){
+  for(let row=0;row<8;row++)for(let col=-1;col<7;col++){
+   const x=col*44+(row%2)*22,y=row*34;
+   ctx.fillStyle=['#bfc0d0','#a5a4bc','#c9c4d4','#9296b2'][Math.floor(rand()*4)];ctx.fillRect(x+2,y+2,41,31);
+   ctx.strokeStyle='#797d9b';ctx.lineWidth=1.5;ctx.strokeRect(x+2,y+2,41,31);
+  }
+ }else if(kind==='path'){
+  for(let i=0;i<85;i++){ctx.fillStyle=rand()>.5?'#f2ddba':'#ad967d';ctx.globalAlpha=.23;ctx.beginPath();ctx.arc(rand()*256,rand()*256,2+rand()*7,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;
+ }else{
+  for(let i=0;i<1900;i++){ctx.fillStyle=rand()>.5?'#2d9753':'#b1e582';ctx.globalAlpha=.35;ctx.fillRect(rand()*256,rand()*256,1+rand()*2,2+rand()*5)}ctx.globalAlpha=1;
+ }
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),4);return t;
+}
+const castleStone=texturePattern('stone');castleStone.repeat.set(5,3);
+const stoneMat=new THREE.MeshStandardMaterial({map:castleStone,roughness:.88});
+const mainCastle=scene.children.find(o=>o.isMesh&&o.geometry.type==='BoxGeometry'&&o.position.z===-28&&o.position.y===6&&o.scale.x===1);
+if(mainCastle)mainCastle.material=stoneMat;
+const pathTexture=texturePattern('path');pathTexture.repeat.set(1,30);
+const mainPath=scene.children.find(o=>o.isMesh&&o.position.y===.04&&o.position.z===-65);
+if(mainPath)mainPath.material=new THREE.MeshStandardMaterial({map:pathTexture,roughness:.96});
+const grassTexture=texturePattern('grass');grassTexture.repeat.set(26,34);
+const grassGround=scene.children.find(o=>o.isMesh&&o.position.y===-.55&&o.position.z===-68);
+if(grassGround)grassGround.material=new THREE.MeshStandardMaterial({map:grassTexture,roughness:1});
+// Mountains frame the horizon and don't interfere with gameplay.
+for(let i=0;i<16;i++){
+ const x=(i-7.5)*12;const z=-178-(i%3)*7;
+ const peak=new THREE.Mesh(new THREE.ConeGeometry(12+(i%4)*3,23+(i%5)*7,7),new THREE.MeshStandardMaterial({color:i%2?0x7593ad:0x8e9db7,roughness:1}));
+ peak.position.set(x,8,z);scene.add(peak);
+ const snow=new THREE.Mesh(new THREE.ConeGeometry(4.3,6,7),new THREE.MeshStandardMaterial({color:0xf5f5ff}));snow.position.set(x,peak.position.y+(23+(i%5)*7)/2-2,z);scene.add(snow);
+}
+// Rounded flowering tree crowns bring the scene closer to a storybook game.
+for(let z=15;z>-150;z-=17){for(const side of [-1,1]){
+ const x=side*(20+(Math.abs(z)%7));
+ const crown=new THREE.Mesh(new THREE.IcosahedronGeometry(3.7,1),new THREE.MeshStandardMaterial({color:side>0?0xff9dc4:0x3da875,roughness:.86}));
+ crown.position.set(x,7.5,z);crown.castShadow=true;scene.add(crown);
+ for(let i=0;i<5;i++){const blossom=new THREE.Mesh(new THREE.IcosahedronGeometry(.32,0),new THREE.MeshStandardMaterial({color:0xffe5f3}));blossom.position.set(x+Math.sin(i*2.4)*3,8+Math.cos(i*1.8)*2,z+Math.cos(i*2.4)*2.7);scene.add(blossom)}
+}}
+// Water pools and waterfall outside the playable route.
+for(const side of [-1,1]){
+ const water=new THREE.Mesh(new THREE.CircleGeometry(9,40),new THREE.MeshPhysicalMaterial({color:0x35c7df,roughness:.14,metalness:.15,transparent:true,opacity:.84,clearcoat:1}));
+ water.rotation.x=-Math.PI/2;water.position.set(side*25,.07,-43);scene.add(water);
+ for(let i=0;i<8;i++){const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.8+(i%3)*.35,0),new THREE.MeshStandardMaterial({color:0x929eb3}));rock.position.set(side*25+Math.cos(i*Math.PI/4)*9,.3,-43+Math.sin(i*Math.PI/4)*9);scene.add(rock)}
+}
+// Gold trim, colorful flags and arched castle windows.
+for(const x of [-15,15]){
+ for(let y of [5,10,15]){
+ const win=new THREE.Mesh(new THREE.CapsuleGeometry(.6,1.3,5,10),new THREE.MeshStandardMaterial({color:0xffd47b,emissive:0xffa42b,emissiveIntensity:.42}));
+ win.position.set(x,y,-24.38);scene.add(win);
+ }
+ const flagpole=cube(.12,5,.12,0xe5cf92,x,25.5,-28);
+ const flag=cube(2.5,1.3,.12,x<0?0x6e54f7:0xff74a6,x+1.2,27,-28);flag.rotation.z=-.1;
+}
+// Golden ornament above the central gate.
+const crest=new THREE.Mesh(new THREE.TorusGeometry(1.1,.18,8,24),new THREE.MeshStandardMaterial({color:0xffd76b,metalness:.75,roughness:.23}));crest.position.set(0,10.7,-23.6);scene.add(crest);
+
+
+// Cinematic distant panorama, integrated with real 3D geometry.
+const panoramaCanvas=document.createElement('canvas');panoramaCanvas.width=1024;panoramaCanvas.height=512;
+const pctx=panoramaCanvas.getContext('2d');
+const sky=pctx.createLinearGradient(0,0,0,512);sky.addColorStop(0,'#2465b6');sky.addColorStop(.42,'#8cd4fa');sky.addColorStop(.72,'#ffe4b0');sky.addColorStop(1,'#89b7a1');pctx.fillStyle=sky;pctx.fillRect(0,0,1024,512);
+pctx.fillStyle='#fff5cc';pctx.beginPath();pctx.arc(810,110,38,0,Math.PI*2);pctx.fill();
+for(let layer=0;layer<3;layer++){
+ pctx.beginPath();pctx.moveTo(0,430+layer*28);
+ for(let x=0;x<=1024;x+=28){const y=310+layer*55+Math.sin(x*.019+layer)*31+Math.sin(x*.049+layer*2)*18;pctx.lineTo(x,y)}
+ pctx.lineTo(1024,512);pctx.lineTo(0,512);pctx.closePath();pctx.fillStyle=['#7b9cba','#5b86a0','#406f72'][layer];pctx.fill();
+}
+const panoramaTexture=new THREE.CanvasTexture(panoramaCanvas);panoramaTexture.colorSpace=THREE.SRGBColorSpace;
+const panorama=new THREE.Mesh(new THREE.SphereGeometry(185,48,24),new THREE.MeshBasicMaterial({map:panoramaTexture,side:THREE.BackSide,depthWrite:false,fog:false}));
+panorama.position.set(0,12,-55);scene.add(panorama);
+// Reflective water and a light waterfall at the sides of the route.
+const scenicWater=[];
+for(const side of [-1,1]){
+ const waterMat=new THREE.MeshPhysicalMaterial({color:0x29a9dd,metalness:.18,roughness:.2,transparent:true,opacity:.84,clearcoat:.7,side:THREE.DoubleSide});
+ const pool=new THREE.Mesh(new THREE.PlaneGeometry(16,28,8,8),waterMat);pool.rotation.x=-Math.PI/2;pool.position.set(side*29,.1,-31);scene.add(pool);
+ const falls=new THREE.Mesh(new THREE.PlaneGeometry(10,16,12,12),new THREE.MeshBasicMaterial({color:0x65d9ff,transparent:true,opacity:.65,side:THREE.DoubleSide,depthWrite:false}));falls.position.set(side*34,8,-43);scene.add(falls);scenicWater.push(falls);
+}
+// Sculpted layered clouds for depth.
+for(let i=0;i<14;i++){
+ const cloud=new THREE.Group();cloud.position.set((i-7)*15,29+(i%3)*4,-65-(i%4)*15);
+ for(let j=0;j<3;j++){const puff=new THREE.Mesh(new THREE.SphereGeometry(2.4+j*.4,10,8),new THREE.MeshBasicMaterial({color:0xf5f4ff,transparent:true,opacity:.78,depthWrite:false}));puff.position.x=j*2.1;cloud.add(puff)}scene.add(cloud);
+}
+
+// Blocky avatar
+const player=new THREE.Group();scene.add(player);const torso=cube(1.5,1.45,.78,0x252046,0,2.05,0,player),head=cube(1.05,1.05,1.05,0xffc89d,0,3.3,0,player);cube(1.15,.3,1.15,0x3d244e,0,3.93,0,player);for(const x of [-.42,.42]){cube(.53,1.1,.65,0x202e70,x,.75,0,player)}const arms=[];for(const x of [-1.03,1.03]){const arm=cube(.45,1.25,.65,0xffc89d,x,2.1,0,player);arms.push(arm)}for(const x of [-.22,.22])cube(.12,.12,.1,0x1c2436,x,3.34,-.54,player);cube(.34,.07,.08,0x9c4538,0,3.05,-.54,player);player.position.set(0,0,14);
+
+// Avatar cosmetic accessories
+const hair=cube(1.18,.3,1.14,0x34233c,0,3.94,-.05,player);
+for(let i=0;i<4;i++)cube(.25,.3,.33,0x34233c,-.39+i*.26,3.79,-.51,player);
+for(const side of [-1,1]){const ear=new THREE.Mesh(new THREE.CylinderGeometry(.29,.29,.2,12),decorMaterial(0x3e2a83,.3));ear.rotation.z=Math.PI/2;ear.position.set(side*.63,3.34,0);player.add(ear);const light=new THREE.Mesh(new THREE.TorusGeometry(.19,.055,6,14),new THREE.MeshBasicMaterial({color:0x48d6ff}));light.rotation.y=Math.PI/2;light.position.set(side*.75,3.34,0);player.add(light)}
+const band=new THREE.Mesh(new THREE.TorusGeometry(.67,.09,7,20,Math.PI),decorMaterial(0x302052));band.rotation.z=Math.PI;band.position.set(0,3.55,0);player.add(band);
+const badge=new THREE.Mesh(new THREE.TorusGeometry(.27,.065,7,24),new THREE.MeshBasicMaterial({color:0x55dfff}));badge.position.set(0,2.16,-.41);player.add(badge);
+
+let started=false,paused=true,level=0,score=0,jumpVelocity=0,groundY=0,near=false,elapsed=0;const pressed=new Set();const joy={x:0,y:0};const tip=document.getElementById('tip');function updateHud(){document.getElementById('score').textContent=score;document.getElementById('stageCount').textContent=`${Math.min(level+1,4)} / 4 кезең`;document.getElementById('stagebar').textContent=level<4?`${levels[level].icon} ${levels[level].title}`:'👑 Жеңіс!'}
+function openQuiz(){if(paused||level>=4)return;paused=true;document.getElementById('quiz').dataset.stage=String(level);const l=levels[level];document.getElementById('quizIcon').textContent=l.icon;document.getElementById('quizTitle').textContent=`${level+1}-кезең. ${l.title}`;document.getElementById('quizInstruction').textContent=l.instruction;const qs=document.getElementById('questions');qs.replaceChildren();l.questions.forEach(([q],i)=>{const wrap=document.createElement('div');wrap.className='q';const label=document.createElement('label');label.textContent=`${i+1}. ${q} =`;label.htmlFor=`answer${i}`;const inp=document.createElement('input');inp.id=`answer${i}`;inp.placeholder='Жауабыңызды енгізіңіз';inp.inputMode='decimal';inp.autocomplete='off';wrap.append(label,inp);qs.append(wrap)});const d=document.getElementById('descriptors');d.replaceChildren();l.desc.forEach(t=>{const line=document.createElement('div');line.textContent='✅ '+t;d.append(line)});document.getElementById('feedback').textContent='';document.getElementById('quiz').classList.remove('hidden')}
+function closeQuiz(){document.getElementById('quiz').classList.add('hidden');paused=false;pressed.clear()}
+document.getElementById('check').onclick=()=>{const l=levels[level];let count=0;l.questions.forEach(([,answer],i)=>{const inp=document.getElementById(`answer${i}`);const v=inp.value.trim().replace(/\s/g,'').replace(',','.');const ok=v!==''&&Number.isFinite(Number(v))&&Math.abs(Number(v)-answer)<1e-6;inp.style.borderColor=ok?'#64e8a4':'#ff7b91';if(ok)count++});if(count<4){document.getElementById('feedback').textContent=`${count}/4 дұрыс. Қалған есептерді қайта тексер!`;return}score+=l.points;gates[level].open=true;document.getElementById('feedback').textContent=`🎉 ${l.praise} +${l.points} балл`;level++;updateHud();document.getElementById('check').disabled=true;setTimeout(()=>{document.getElementById('check').disabled=false;closeQuiz();if(level===4){paused=true;document.getElementById('finish').classList.remove('hidden')}else tip.textContent='🌟 Жарайсың! Келесі қақпаға қарай жүр!'},1900)};
+document.getElementById('back').onclick=closeQuiz;document.getElementById('start').onclick=()=>{document.getElementById('overlay').classList.add('hidden');started=true;paused=false};document.getElementById('again').onclick=()=>location.reload();document.getElementById('interact').onclick=openQuiz;
+window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();pressed.add(k);if(k===' '&&!paused&&groundY===0)jumpVelocity=.19;if(k==='e'&&near)openQuiz()});window.addEventListener('keyup',e=>pressed.delete(e.key.toLowerCase()));window.addEventListener('blur',()=>pressed.clear());document.getElementById('jump').onclick=()=>{if(!paused&&groundY===0)jumpVelocity=.19};const pad=document.getElementById('pad'),nub=document.getElementById('nub');function stick(e){const r=pad.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),len=Math.max(1,Math.hypot(dx,dy)),max=r.width*.31,f=Math.min(1,max/len);joy.x=dx*f/max;joy.y=dy*f/max;nub.style.transform=`translate(${dx*f}px,${dy*f}px)`}pad.addEventListener('pointerdown',e=>{pad.setPointerCapture(e.pointerId);stick(e)});pad.addEventListener('pointermove',e=>{if(pad.hasPointerCapture(e.pointerId))stick(e)});function resetStick(){joy.x=joy.y=0;nub.style.transform='translate(0,0)'}pad.addEventListener('pointerup',resetStick);pad.addEventListener('pointercancel',resetStick);
+const clock=new THREE.Clock();function frame(){requestAnimationFrame(frame);const dt=Math.min(clock.getDelta(),.045);elapsed+=dt;for(const w of scenicWater){w.material.opacity=.52+Math.sin(elapsed*2.8)*.12;w.position.y=8+Math.sin(elapsed*1.7)*.15}for(const d of decor){d.mesh.position.y=d.y+Math.sin(elapsed*1.7+d.phase)*.12;d.mesh.rotation.y+=dt*.35}for(const g of gates){if(g.magicRing)g.magicRing.material.emissiveIntensity=.5+Math.sin(elapsed*2)*.2}if(started&&!paused){let x=(pressed.has('d')||pressed.has('arrowright')?1:0)-(pressed.has('a')||pressed.has('arrowleft')?1:0)+joy.x;let z=(pressed.has('s')||pressed.has('arrowdown')?1:0)-(pressed.has('w')||pressed.has('arrowup')?1:0)+joy.y;const mag=Math.hypot(x,z);if(mag>.1){x/=Math.max(1,mag);z/=Math.max(1,mag);const speed=dt*7;player.position.x+=x*speed;player.position.z+=z*speed;player.rotation.y=Math.atan2(-x,-z);arms[0].rotation.x=Math.sin(elapsed*12)*.45;arms[1].rotation.x=-Math.sin(elapsed*12)*.45}else arms.forEach(a=>a.rotation.x*=.8);player.position.x=THREE.MathUtils.clamp(player.position.x,-34,34);player.position.z=Math.min(player.position.z,18);if(level<4){const gz=gateZ[level];if(player.position.z<gz+2.5&&Math.abs(player.position.x)<5){player.position.z=gz+2.5;openQuiz()}}jumpVelocity-=dt*.5;groundY=Math.max(0,groundY+jumpVelocity*dt*60);if(groundY===0)jumpVelocity=0;player.position.y=groundY;near=level<4&&Math.abs(player.position.z-gateZ[level])<10;document.getElementById('interact').style.display=near?'block':'none';if(!near)tip.textContent='🎮 Келесі қақпаға қарай жүріңіз';else tip.textContent='🔐 Қақпаға жақындаңыз немесе «Тапсырма» басыңыз'}gates.forEach((g,i)=>{if(g.open){g.door.position.y=THREE.MathUtils.lerp(g.door.position.y,12,dt*2);g.lock.visible=false}});bridge.forEach((p,i)=>{const target=level>=2?.15:-2;p.position.y=THREE.MathUtils.lerp(p.position.y,target,dt*1.5)});const target=new THREE.Vector3(player.position.x,player.position.y+7,player.position.z+12);camera.position.lerp(target,.09);camera.lookAt(player.position.x,player.position.y+2,player.position.z-7);renderer.render(scene,camera)}frame();addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});updateHud();
+</script></body></html>
